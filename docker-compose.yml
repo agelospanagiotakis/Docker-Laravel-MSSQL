@@ -1,0 +1,117 @@
+services:
+
+  # Application
+  app:
+    container_name: app
+    build:
+      context: .
+      dockerfile: ./docker/app.dockerfile
+    working_dir: /var/www
+    networks:
+      - default
+      - traefik
+    ports:
+      - 9000:9000
+      - 5173:5173
+    environment:
+      PROJECT_NAME: ${PROJECT_NAME}
+      PROJECT_BASE_URL: ${PROJECT_BASE_URL}
+      DB_ENCRYPT: ${DB_ENCRYPT}
+      DB_TRUST_SERVER_CERTIFICATE: ${DB_TRUST_SERVER_CERTIFICATE}
+      DB_USERNAME: ${DB_USERNAME}
+      DB_PASSWORD: ${DB_PASSWORD}
+      DB_DATABASE: ${DB_DATABASE}
+    volumes:
+      - ./app:/var/www
+    labels:
+      - 'traefik.enable=true'
+      - 'traefik.http.routers.${PROJECT_NAME}_app.entrypoints=https'
+      - 'traefik.http.routers.${PROJECT_NAME}_app.rule=Host(`${PROJECT_BASE_URL}`)'
+      ## if varnish is enabled disable above label and enable the following
+      # - "traefik.http.routers.${PROJECT_NAME}_app.rule=Host(`app-${PROJECT_BASE_URL}`)"
+      - 'traefik.http.routers.${PROJECT_NAME}_app.tls=true'
+      - 'traefik.http.services.${PROJECT_NAME}_app.loadbalancer.server.port=80'
+      - 'traefik.http.routers.${PROJECT_NAME}_app.service=${PROJECT_NAME}_app@docker'
+      - 'traefik.docker.network=traefik_proxy'
+
+  web:
+    container_name: web
+    build:
+      context: .
+      dockerfile: ./docker/web.dockerfile
+    working_dir: /var/www
+    volumes:
+      - ./app:/var/www/
+    networks:
+      - default
+      - traefik
+    ports:
+        - 8080:80
+    labels:
+      - 'traefik.enable=true'
+      - 'traefik.http.routers.${PROJECT_NAME}_nginx.entrypoints=https'
+      - 'traefik.http.routers.${PROJECT_NAME}_nginx.rule=Host(`${PROJECT_BASE_URL}`)'
+      ## if varnish is enabled disable above label and enable the following
+      # - "traefik.http.routers.${PROJECT_NAME}_nginx.rule=Host(`nginx-${PROJECT_BASE_URL}`)"
+      - 'traefik.http.routers.${PROJECT_NAME}_nginx.tls=true'
+      - 'traefik.http.services.${PROJECT_NAME}_nginx.loadbalancer.server.port=80'
+      - 'traefik.http.routers.${PROJECT_NAME}_nginx.service=${PROJECT_NAME}_nginx@docker'
+      - 'traefik.docker.network=traefik_proxy'
+
+  # npm:
+  #   image: node:current-alpine
+  #   volumes:
+  #     - ./app:/var/www/app
+  #   command: npm run dev
+  #   working_dir: /var/www/app
+  #   ports:
+  #     - 5173:3000
+
+# docker run -e "ACCEPT_EULA=Y"
+#  -e "MSSQL_SA_PASSWORD=yourStrong(!)Password" 
+#  -e "MSSQL_PID=Express" -p 1433:1433 
+#  -d mcr.microsoft.com/mssql/server:2019-latest 
+# https://github.com/microsoft/mssql-docker/tree/master/linux/preview/examples/mssql-customize
+
+  sqlsrv:
+    # image: mcr.microsoft.com/mssql/server:2017-latest
+    image: mcr.microsoft.com/mssql/server:latest
+     # image: mcr.microsoft.com/mssql/server:2019-latest
+    container_name: sqlsrv
+    environment:
+      ACCEPT_EULA: 'Y'
+      SA_PASSWORD: '${DB_PASSWORD}'
+      Encrypt: 'no'
+      # MSSQL_PID=Express
+    networks:
+      - default
+      - traefik
+    ports:
+      - 1433:1433
+    volumes:
+      - ./app:/var/www/
+      # - ./mssql:/var/opt/mssql
+      # - ./sql1/mssql.conf:/var/opt/mssql/mssql.conf
+      # - ./sql1/mssql.pem:/etc/ssl/certs/mssql.pem
+      # - ./sql1/mssql.key:/etc/ssl/private/mssql.key
+  adminer:
+    image: adminer
+    container_name: adminer
+    # restart: always
+    ports:
+      - 8081:8080
+    labels:
+      - 'traefik.enable=true'
+      - 'traefik.http.routers.${PROJECT_NAME}_adminer.entrypoints=https'
+      - 'traefik.http.routers.${PROJECT_NAME}_adminer.rule=Host(`${PROJECT_BASE_URL}`)'
+      ## if varnish is enabled disable above label and enable the following
+      # - "traefik.http.routers.${PROJECT_NAME}_adminer.rule=Host(`adminer-${PROJECT_BASE_URL}`)"
+      - 'traefik.http.routers.${PROJECT_NAME}_adminer.tls=true'
+      - 'traefik.http.services.${PROJECT_NAME}_adminer.loadbalancer.server.port=80'
+      - 'traefik.http.routers.${PROJECT_NAME}_adminer.service=${PROJECT_NAME}_adminer@docker'
+      - 'traefik.docker.network=traefik_proxy'
+
+networks:
+  traefik:
+    external: true
+    name: traefik_proxy
