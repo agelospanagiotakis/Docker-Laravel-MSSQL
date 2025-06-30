@@ -598,7 +598,9 @@ public function show($id)
         
         $admission->save();
 
-        return redirect()->back()->with('success', 'Admission details updated successfully.');
+        return redirect()->back()->with('success', 'Admission details updated successfully.')
+            ->with('active_tab_a', $request->input('active_tab_a'))
+            ->with('active_tab_b', $request->input('active_tab_b'));
     }
 
     public function updateTexts(Request $request, $id)
@@ -624,6 +626,8 @@ public function show($id)
             ]
         );
     
-        return redirect()->back()->with('success', 'Clinical details updated successfully.');
+        return redirect()->back()->with('success', 'Clinical details updated successfully.')
+            ->with('active_tab_a', $request->input('active_tab_a'))
+            ->with('active_tab_b', $request->input('active_tab_b'));
     }
 }

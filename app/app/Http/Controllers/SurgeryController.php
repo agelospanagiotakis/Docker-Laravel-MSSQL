@@ -10,6 +10,7 @@ use App\Models\Admission;
 use App\Models\TextsSurgery;
 use Illuminate\Support\Collection;
 use Barryvdh\DomPDF\Facade\Pdf;
+use Illuminate\Support\Facades\DB;
 
 class SurgeryController extends Controller
 {
@@ -140,59 +141,63 @@ class SurgeryController extends Controller
             'SuAbout' => 'nullable|string',
         ]);
 
-        $surgery->DatePerformed = $validatedData['DatePerformed'];
-        $surgery->Notes = $validatedData['Notes'];
+        if (array_key_exists('DatePerformed', $validatedData)) {
+            $surgery->DatePerformed = $validatedData['DatePerformed'];
+        }
+        if (array_key_exists('Notes', $validatedData)) {
+            $surgery->Notes = $validatedData['Notes'];
+        }
 
-        if (isset($validatedData['DoctorOperator'])) {
+        if (array_key_exists('DoctorOperator', $validatedData)) {
             $doctorOperator = Doctor::where(DB::raw("CONCAT(FirstName, ' ', LastName)"), $validatedData['DoctorOperator'])->first();
             if ($doctorOperator) {
-                $surgery->DoctorOperatorID = $doctorOperator->ID;
+                $surgery->DoctorOperator = $doctorOperator->ID;
             }
         }
 
-        if (isset($validatedData['DoctorAssistant'])) {
+        if (array_key_exists('DoctorAssistant', $validatedData)) {
             $doctorAssistant = Doctor::where(DB::raw("CONCAT(FirstName, ' ', LastName)"), $validatedData['DoctorAssistant'])->first();
             if ($doctorAssistant) {
-                $surgery->DoctorAssistantID = $doctorAssistant->ID;
+                $surgery->DoctorAssistant = $doctorAssistant->ID;
             }
         }
 
-        if (isset($validatedData['DoctorAssistantB'])) {
+        if (array_key_exists('DoctorAssistantB', $validatedData)) {
             $doctorAssistantB = Doctor::where(DB::raw("CONCAT(FirstName, ' ', LastName)"), $validatedData['DoctorAssistantB'])->first();
             if ($doctorAssistantB) {
-                $surgery->DoctorAssistantBID = $doctorAssistantB->ID;
+                $surgery->DoctorAssistantB = $doctorAssistantB->ID;
             }
         }
 
-        if (isset($validatedData['DoctorAnest'])) {
+        if (array_key_exists('DoctorAnest', $validatedData)) {
             $doctorAnest = Doctor::where(DB::raw("CONCAT(FirstName, ' ', LastName)"), $validatedData['DoctorAnest'])->first();
             if ($doctorAnest) {
-                $surgery->DoctorAnestID = $doctorAnest->ID;
+                $surgery->DoctorAnest = $doctorAnest->ID;
             }
         }
 
-        if (isset($validatedData['Anesthesia'])) {
+        if (array_key_exists('Anesthesia', $validatedData)) {
             $anesthesia = DB::table('Lookup')->where('Value', $validatedData['Anesthesia'])->first();
             if ($anesthesia) {
-                $surgery->AnesthesiaID = $anesthesia->ID;
+                $surgery->AnesthisiaID = $anesthesia->ID;
             }
         }
 
-        if (isset($validatedData['Access'])) {
+        if (array_key_exists('Access', $validatedData)) {
             $access = DB::table('Lookup')->where('Value', $validatedData['Access'])->first();
             if ($access) {
                 $surgery->AccessID = $access->ID;
             }
         }
 
-        if (isset($validatedData['Operation'])) {
+        if (array_key_exists('Operation', $validatedData)) {
             $operation = DB::table('Lookup')->where('Value', $validatedData['Operation'])->first();
             if ($operation) {
                 $surgery->OperationID = $operation->ID;
             }
         }
 
-        if (isset($validatedData['Istologika'])) {
+        if (array_key_exists('Istologika', $validatedData)) {
             $istologika = DB::table('Lookup')->where('Value', $validatedData['Istologika'])->first();
             if ($istologika) {
                 $surgery->IstologikaID = $istologika->ID;
@@ -210,6 +215,8 @@ class SurgeryController extends Controller
             $textsSurgery->save();
         }
 
-        return redirect()->back()->with('success', 'Surgery details updated successfully.');
+        return redirect()->back()->with('success', 'Surgery details updated successfully.')
+            ->with('active_tab_a', $request->input('active_tab_a'))
+            ->with('active_tab_b', $request->input('active_tab_b'));
     }
 }

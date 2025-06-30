@@ -31,10 +31,12 @@ class CertificateController extends Controller
             'CeSickLeave' => 'nullable|string',
         ]);
 
-        $certificate->FromDate = $validatedData['FromDate'];
-        $certificate->ToDate = $validatedData['ToDate'];
-        $certificate->Notes = $validatedData['Notes'];
-        $certificate->IssuedDate = $validatedData['IssuedDate'];
+        $fieldsToUpdate = ['FromDate', 'ToDate', 'Notes', 'IssuedDate'];
+        foreach ($fieldsToUpdate as $field) {
+            if (array_key_exists($field, $validatedData)) {
+                $certificate->$field = $validatedData[$field];
+            }
+        }
 
         if (isset($validatedData['DoctorA'])) {
             $doctorA = DB::table(TableNames::Doctors->value)->where(DB::raw("CONCAT(FirstName, ' ', LastName)"), $validatedData['DoctorA'])->first();
@@ -54,14 +56,15 @@ class CertificateController extends Controller
 
         if ($certificate->textsCertificate) {
             $textsCertificate = $certificate->textsCertificate;
-            $textsCertificate->CeParousa = $validatedData['CeParousa'];
-            $textsCertificate->CeAtomiko = $validatedData['CeAtomiko'];
-            $textsCertificate->CeNeuron = $validatedData['CeNeuron'];
-            $textsCertificate->ceProjections = $validatedData['ceProjections'];
-            $textsCertificate->cePoreia = $validatedData['cePoreia'];
-            $textsCertificate->ceDrugs = $validatedData['ceDrugs'];
-            $textsCertificate->CeDirections = $validatedData['CeDirections'];
-            $textsCertificate->CeSickLeave = $validatedData['CeSickLeave'];
+            $textFields = [
+                'CeParousa', 'CeAtomiko', 'CeNeuron', 'ceProjections', 'cePoreia',
+                'ceDrugs', 'CeDirections', 'CeSickLeave'
+            ];
+            foreach ($textFields as $field) {
+                if (array_key_exists($field, $validatedData)) {
+                    $textsCertificate->$field = $validatedData[$field];
+                }
+            }
             $textsCertificate->save();
         }
 

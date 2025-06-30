@@ -1,9 +1,11 @@
 ΠΑΡΟΥΣΑ ΝΟΣΟΣ: <br />
 @if ($admission)
     @if ($admission)
-    <form action="{{ route('admissions.texts.update', $admission->ID) }}" method="POST">
+    <form action="{{ route('admissions.texts.update', $admission->ID) }}" method="POST" id="clinicals-details-form">
         @csrf
         @method('PATCH')
+        <input type="hidden" name="active_tab_a" id="clinicals_active_tab_a">
+        <input type="hidden" name="active_tab_b" id="clinicals_active_tab_b">
         <div class="grid grid-cols-2">
         <div class="">
     {{-- @dd($admission->textsAdmission) --}}
@@ -46,7 +48,24 @@
     </button>
 </div>
 </form>
-    @else 
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const clinicalsForm = document.getElementById('clinicals-details-form');
+        if(clinicalsForm) {
+            clinicalsForm.addEventListener('submit', function(e) {
+                const activeTabA = document.querySelector('input[name="my_tabs_A"]:checked');
+                const activeTabB = document.querySelector('input[name="my_tabs_B"]:checked');
+                if (activeTabA) {
+                    document.getElementById('clinicals_active_tab_a').value = activeTabA.getAttribute('aria-label');
+                }
+                if (activeTabB) {
+                    document.getElementById('clinicals_active_tab_b').value = activeTabB.getAttribute('aria-label');
+                }
+            });
+        }
+    });
+</script>
+    @else
       no  texts in admission
     @endif 
 

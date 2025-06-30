@@ -248,7 +248,10 @@ public function index(Request $request)
 
         $patient->save();
 
-        return redirect()->route('patients.show', $patient->ID)->with('success', 'Patient details updated successfully.');
+        return redirect()->route('patients.show', $patient->ID)
+            ->with('success', 'Patient details updated successfully.')
+            ->with('active_tab_a', $request->input('active_tab_a'))
+            ->with('active_tab_b', $request->input('active_tab_b'));
     }
 
 }

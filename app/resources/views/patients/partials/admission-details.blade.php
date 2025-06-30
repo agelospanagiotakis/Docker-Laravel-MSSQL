@@ -1,8 +1,10 @@
 
 @if ($admission)
-<form action="{{ route('admissions.update', $admission->ID) }}" method="POST">
+<form action="{{ route('admissions.update', $admission->ID) }}" method="POST" id="admission-details-form">
     @csrf
     @method('PATCH')
+    <input type="hidden" name="active_tab_a" id="admission_active_tab_a">
+    <input type="hidden" name="active_tab_b" id="admission_active_tab_b">
     {{-- @dd($admission) --}}
     <div class="flex items-center mb-4">
         <strong class="mr-2 min-w-[150px]">ID:</strong>
@@ -247,6 +249,23 @@
     </button>
 </div>
 </form>
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const admissionForm = document.getElementById('admission-details-form');
+        if(admissionForm) {
+            admissionForm.addEventListener('submit', function(e) {
+                const activeTabA = document.querySelector('input[name="my_tabs_A"]:checked');
+                const activeTabB = document.querySelector('input[name="my_tabs_B"]:checked');
+                if (activeTabA) {
+                    document.getElementById('admission_active_tab_a').value = activeTabA.getAttribute('aria-label');
+                }
+                if (activeTabB) {
+                    document.getElementById('admission_active_tab_b').value = activeTabB.getAttribute('aria-label');
+                }
+            });
+        }
+    });
+</script>
 @else
 <p  class="text-red-500">Λυπάμαι, δεν βρέθηκαν πληροφορίες για την επιλεγμένη εισαγωγή.</p>
 @endif

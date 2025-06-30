@@ -1,8 +1,10 @@
 {{-- SURGERY START <br/> --}}
 @if ($surgery)
-<form action="{{ route('surgeries.update', $surgery->ID) }}" method="POST">
+<form action="{{ route('surgeries.update', $surgery->ID) }}" method="POST" id="surgery-details-form">
     @csrf
     @method('PATCH')
+    <input type="hidden" name="active_tab_a" id="surgery_active_tab_a">
+    <input type="hidden" name="active_tab_b" id="surgery_active_tab_b">
 <div class="flex flex-row justify-between">
     <div class="flex justify-start ">
     Surgery ID:{{$surgery->ID}}
@@ -203,6 +205,23 @@
     </button>
 </div>
 </form>
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const surgeryForm = document.getElementById('surgery-details-form');
+        if(surgeryForm) {
+            surgeryForm.addEventListener('submit', function(e) {
+                const activeTabA = document.querySelector('input[name="my_tabs_A"]:checked');
+                const activeTabB = document.querySelector('input[name="my_tabs_B"]:checked');
+                if (activeTabA) {
+                    document.getElementById('surgery_active_tab_a').value = activeTabA.getAttribute('aria-label');
+                }
+                if (activeTabB) {
+                    document.getElementById('surgery_active_tab_b').value = activeTabB.getAttribute('aria-label');
+                }
+            });
+        }
+    });
+</script>
 
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>

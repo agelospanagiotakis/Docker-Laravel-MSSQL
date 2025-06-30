@@ -13,8 +13,10 @@
         <div class="p-6 bg-white rounded-lg shadow-md">
             <h2 class="mb-2 text-xl font-semibold">Στοιχεία Ασθενούς</h2>
 
-            <form action="{{ route('patients.update', $patient->ID) }}" method="POST">
+            <form action="{{ route('patients.update', $patient->ID) }}" method="POST" id="patient-details-form">
                 @csrf
+                <input type="hidden" name="active_tab_a" id="active_tab_a">
+                <input type="hidden" name="active_tab_b" id="active_tab_b">
                 <div class="grid grid-cols-2 gap-4">
                     <div>
                         <strong>Επώνυμο:</strong> {{ e($patient->LastName) }}
@@ -462,6 +464,39 @@ function showLoading() {
 
     // Initial button state update
     updateButtonStates();
+
+    document.addEventListener('DOMContentLoaded', function() {
+        const patientForm = document.getElementById('patient-details-form');
+        if(patientForm) {
+            patientForm.addEventListener('submit', function(e) {
+                const activeTabA = document.querySelector('input[name="my_tabs_A"]:checked');
+                const activeTabB = document.querySelector('input[name="my_tabs_B"]:checked');
+                if (activeTabA) {
+                    document.getElementById('active_tab_a').value = activeTabA.getAttribute('aria-label');
+                }
+                if (activeTabB) {
+                    document.getElementById('active_tab_b').value = activeTabB.getAttribute('aria-label');
+                }
+            });
+        }
+
+        const activeTabA = "{{ session('active_tab_a') }}";
+        const activeTabB = "{{ session('active_tab_b') }}";
+
+        if (activeTabA) {
+            const tabA = document.querySelector(`input[name="my_tabs_A"][aria-label="${activeTabA}"]`);
+            if (tabA) {
+                tabA.checked = true;
+            }
+        }
+
+        if (activeTabB) {
+            const tabB = document.querySelector(`input[name="my_tabs_B"][aria-label="${activeTabB}"]`);
+            if (tabB) {
+                tabB.checked = true;
+            }
+        }
+    });
     
         </script>
 @endsection

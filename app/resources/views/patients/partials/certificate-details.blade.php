@@ -1,9 +1,11 @@
 certificate start
 <br />
 <div>
-<form action="{{ route('certificates.update', $certificate->ID) }}" method="POST">
+<form action="{{ route('certificates.update', $certificate->ID) }}" method="POST" id="certificate-details-form">
     @csrf
     @method('PATCH')
+    <input type="hidden" name="active_tab_a" id="certificate_active_tab_a">
+    <input type="hidden" name="active_tab_b" id="certificate_active_tab_b">
 @if ($certificate != null)
     certificateID: {{ $certificate->ID }}
     @if ($certificate->textsCertificate)
@@ -69,7 +71,7 @@ certificate start
             
                  {{-- @dd($certificate->textsCertificate) --}}
                 ΠΑΡΟΥΣΑ ΝΟΣΟΣ: <br />
-                <textarea rows="4"
+                <textarea name="CeParousa" rows="4"
                     class="block p-2.5 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
                     >
                     @if ($certificate->textsCertificate)
@@ -77,7 +79,7 @@ certificate start
                     @endif 
                 </textarea>
                 ΑΤΟΜΙΚΟ: <br />
-                <textarea rows="4"
+                <textarea name="CeAtomiko" rows="4"
                     class="block p-2.5 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
                     >
                     @if ($certificate->textsCertificate)
@@ -85,15 +87,15 @@ certificate start
                     @endif 
                     </textarea>
                 ΝΕΥΡΟΛΟΓΙΚΗ ΕΞΕΤΑΣΗ: <br />
-                <textarea rows="4"
+                <textarea name="CeNeuron" rows="4"
                     class="block p-2.5 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                    >
                     @if ($certificate->textsCertificate)
                     {{ e($certificate->textsCertificate->CeNeuron ?? '') }}
                     @endif 
-                    >
                 </textarea>
                 ΑΠΕΙΚΟΝΙΣΤΙΚΆ: <br />
-                <textarea rows="4"
+                <textarea name="ceProjections" rows="4"
                     class="block p-2.5 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
                    >
                    @if ($certificate->textsCertificate)
@@ -102,7 +104,7 @@ certificate start
                    </textarea>
 
                 ΠΟΡΕΙΑ-ΕΠΕΜΒΑΣΕΙΣ: <br />
-                <textarea rows="4"
+                <textarea name="cePoreia" rows="4"
                     class="block p-2.5 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
 
                 >
@@ -112,7 +114,7 @@ certificate start
             </textarea>
 
                 ΦΑΡΜΑΚΕΥΤΙΚΗ ΑΓΩΓΗ: <br />
-                <textarea rows="4"
+                <textarea name="ceDrugs" rows="4"
                     class="block p-2.5 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
                     >
                     @if ($certificate->textsCertificate)
@@ -121,7 +123,7 @@ certificate start
                 </textarea>
 
                 ΟΔΗΓΙΕΣ: <br />
-                <textarea rows="4"
+                <textarea name="CeDirections" rows="4"
                     class="block p-2.5 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
                     
                     >
@@ -131,7 +133,7 @@ certificate start
                 </textarea>
 
                 ΑΝΑΡΩΤΙΚΗ ΑΔΕΙΑ: <br />
-                <textarea rows="4"
+                <textarea name="CeSickLeave" rows="4"
                     class="block p-2.5 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
                     
                     >
@@ -156,3 +158,20 @@ certificate end
     </button>
 </div>
 </form>
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const certificateForm = document.getElementById('certificate-details-form');
+        if(certificateForm) {
+            certificateForm.addEventListener('submit', function(e) {
+                const activeTabA = document.querySelector('input[name="my_tabs_A"]:checked');
+                const activeTabB = document.querySelector('input[name="my_tabs_B"]:checked');
+                if (activeTabA) {
+                    document.getElementById('certificate_active_tab_a').value = activeTabA.getAttribute('aria-label');
+                }
+                if (activeTabB) {
+                    document.getElementById('certificate_active_tab_b').value = activeTabB.getAttribute('aria-label');
+                }
+            });
+        }
+    });
+</script>
