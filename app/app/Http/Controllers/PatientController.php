@@ -145,6 +145,7 @@ public function index(Request $request)
             $selectedSurgeryID = null;
             $selectedSurgeryID = null;
             $selectedSurgeryID = null;
+            $selectedSurgeryID = null;
             $selectedSurgery = null;
             foreach ($selectedAdmission->surgeries as $mysurgery) {
                 $selectedSurgery = $mysurgery;
