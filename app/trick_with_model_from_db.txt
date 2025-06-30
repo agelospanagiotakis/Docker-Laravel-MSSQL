@@ -1,0 +1,2 @@
+composer require reliese/laravel --dev
+php artisan code:models --table=vdoctor

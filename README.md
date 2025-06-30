@@ -1,167 +1,166 @@
-# Docker +  PHP 8 + Laravel + MSSQL 
+# Laravel Dockerized Application
 
-## Versions 
+This is a full-stack web application built with Laravel, Vite, and Tailwind CSS, all running in a containerized environment powered by Docker and Docker Compose. It includes a complete setup for local development, including a web server, database, and other necessary services.
 
-- PHP 8.2-fpm
-- Laravel 11
-- Laravel 11 - must have ODBC Driver 17 for SQL Server
-- MS SQL Server
+## Features
 
+- **Backend:** Laravel 11 with PHP 8.2
+- **Frontend:** Vite, Tailwind CSS, Alpine.js, and daisyUI
+- **Database:** Microsoft SQL Server
+- **Development Environment:** Fully containerized with Docker and Docker Compose.
+- **Services:** Includes a web server (Nginx), a database (SQL Server), and Adminer for database management.
+- **Authentication:** Comes with Laravel Breeze for ready-to-use authentication scaffolding.
+- **Testing:** Set up with Pest for a modern and expressive testing experience.
+- **PDF Generation:** Includes `barryvdh/laravel-dompdf` for easy PDF generation from HTML.
+- **Eloquent Models:** Uses `reliese/laravel` to generate Eloquent models automatically.
 
-## Build
-build the docker images 
-```
-docker compose build 
-```
-or 
-```
-docker compose build --no-cache
-```
+## Prerequisites
 
-important files to review and change: 
+Before you begin, ensure you have the following installed on your local machine:
 
-- for the overall docker configuration 
-    - see [docker-compose.yml](docker-compose.yml)
-- for variables see .env files on [.env](.env)
-- see how the MSSQL support is created [docker/app.dockerfile](docker/app.dockerfile)
-- see how nginx is created to serve laravel [docker/web.dockerfile](docker/web.dockerfile)
-- see how nginx is configured [docker/vhost.conf](docker/vhost.conf)
-  - remember : app:9000 is pointing to the laravel php container 
+- [Docker](https://www.docker.com/get-started)
+- [Docker Compose](https://docs.docker.com/compose/install/)
 
-## Setup 
+## Getting Started
 
-place you laravel app on app folder
-if needed (for example if you are using Vite) go to app folder and run 
+Follow these steps to get the project up and running on your local machine.
 
-```
-docker exec -it app sh
-#cd /var/www/app/ 
-# npm run dev
-or
-npm run dev -- --host
+### 1. Clone the Repository
 
+First, clone this repository to your local machine:
+
+```bash
+git clone <repository-url>
+cd <repository-directory>
 ```
 
+### 2. Set Up the Environment File
 
-## RUN
+The project uses a `.env` file for environment-specific configurations. You can create one by copying the example file:
 
-simply run 
-```
-docker compose up -d 
-```
-
-visit [your web app at ](https://laravel.docker.localhost/)
-laravel.docker.localhost
-do not forget to [configure your laravel app .env file as shown in our sample file](app/.env.sample) with 
-
-```
-DB_CONNECTION=sqlsrv
-DB_HOST=sqlsrv
-# DB_PORT=1433
-DB_DATABASE=ekne
-DB_USERNAME=sa
-DB_PASSWORD=yourStrong!pass
-DB_TRUST_SERVER_CERTIFICATE=true
+```bash
+cp .env.sample .env
 ```
 
+Next, open the `.env` file and customize the variables as needed. At a minimum, you should set the following:
 
-Also visit [adminner as sql client ](http://laravel.docker.localhost:8081/) to import your database
+- `PROJECT_NAME`: A unique name for your project.
+- `PROJECT_BASE_URL`: The base URL for your project (e.g., `my-project.localhost`).
+- `DB_PASSWORD`: A strong password for the database.
 
-```
-System: MS SQL (beta)
-Server: sqlsrv
-Username: sa
-Pass: ${DB_PASSWORD} see .env file
-db: databases
-```
+### 3. Build and Run the Docker Containers
 
+With Docker and Docker Compose installed, you can build and run the containers with a single command:
 
-# Setting up your db 
-
-we MSSQL Adminer 
-
-on 
-http://laravel.docker.localhost:8081/
-
-using these credentials 
-```
-server: MS SQL (beta)
-mssql: sqlsrv
-username: sa
-password: yourStrong!pass
+```bash
+docker-compose up -d --build
 ```
 
-find databases on adminer 
-```
-SELECT name, database_id, create_date FROM sys.databases; GO  
-```
+This will start all the services in the background.
 
+### 4. Install Dependencies
 
-on your laravel app add this connection string to MSSQL
-```
- 'sqlsrv' => [
-            'driver' => 'sqlsrv',
-            'host' => env('DB_HOST', 'sqlsrv'),
-            'port' => env('DB_PORT', '1433'),
-            'database' => env('DB_DATABASE', 'test'),
-            'username' => env('DB_USERNAME', 'sa'),
-            'password' => env('DB_PASSWORD', ''),
-            'charset' => 'utf8',
-            'prefix' => '',
-            'options'  => [
-                'TrustServerCertificate' => 'Yes',
-                'trust_server_certificate'=>'yes'
-            ],
-            'trust_server_certificate'=>'yes',
-            'TrustServerCertificate' => 'Yes',
-        ],
+Once the containers are running, you need to install the PHP and Node.js dependencies:
+
+```bash
+docker-compose exec app composer install
+docker-compose exec app npm install
 ```
 
-## Import db 
+### 5. Run Database Migrations
 
-Go ahead and read
+Finally, run the database migrations to set up the necessary tables:
 
- https://learn.microsoft.com/en-us/sql/linux/quickstart-install-connect-ubuntu?view=sql-server-ver16&tabs=ubuntu2004
-
-but speed instructions are here :
-
-
-```
-curl https://packages.microsoft.com/config/ubuntu/22.04/prod.list | sudo tee /etc/apt/sources.list.d/mssql-release.list
-sudo apt-get update && sudo apt-get install mssql-tools18
-
+```bash
+docker-compose exec app php artisan migrate
 ```
 
-now you can import your db
+## Usage
 
-```
-source .env
-docker exec -it sqlsrv sh 
+### Running the Development Server
 
-docker exec -it sqlsrv /opt/mssql-tools18/bin/sqlcmd -S localhost -U sa -P yourStrong!pass -C  -i /var/www/test_export.sql
-```
-or from iside of the container 
-```
-docker exec -it sqlsrv sh
-/opt/mssql-tools18/bin/sqlcmd -S localhost -U sa -P  '${DB_PASSWORD}' -C
+To start the Vite development server, run the following command:
+
+```bash
+docker-compose exec app npm run dev
 ```
 
-# Possible errors when connecting 
+The application will be available at the `PROJECT_BASE_URL` you set in your `.env` file.
 
-Getting : 
+### Running Tests
+
+To run the test suite, use the following command:
+
+```bash
+docker-compose exec app php artisan test
 ```
-SQLSTATE[08001]: [Microsoft][ODBC Driver 17 for SQL Server]SSL Provider: [OpenSSL library could not be loaded, make sure OpenSSL 1.0 or 1.1 is installed] (Connection: sqlsrv, SQL: select top 1 * from [User] where [UserID] = agelos)
+
+## Creating and Restoring a Database
+
+To create a new database and import data from a `.sql` backup file, follow these steps carefully.
+
+**Important:** All `docker-compose` commands must be run from your host machine's terminal, in the same directory as the `docker-compose.yml` file.
+
+1.  **Configure Environment:** Ensure your `.env` file has the correct values for `DB_DATABASE` (e.g., `ekne`) and `DB_PASSWORD`.
+
+2.  **Place the SQL file:** Copy your `.sql` backup file (e.g., `backup.sql`) into the `app/` directory.
+
+3.  **(Debugging) Verify Password:** The "Login failed" error usually means the password is wrong. Run this command to see the password that the container is using. It should match what's in your `.env` file.
+
+    ```bash
+    docker-compose exec sqlsrv /bin/bash -c 'echo "Container SA_PASSWORD is: ${SA_PASSWORD}"'
+    ```
+    If this is incorrect, check your `.env` file, then **restart the containers** for the changes to take effect:
+    ```bash
+    docker-compose down && docker-compose up -d
+    ```
+
+4.  **Create the Database:** If the database does not already exist, create it with this command. It connects to the `master` database to run the `CREATE DATABASE` query.
+
+    ```bash
+    docker-compose exec sqlsrv /bin/bash -c '/opt/mssql-tools18/bin/sqlcmd -S localhost -U sa -P "${SA_PASSWORD}" -Q "CREATE DATABASE ${DB_DATABASE}" -N -C'
+    ```
+    If this command succeeds, you can proceed. If it fails with a login error, the password is the problem.
+
+5.  **Run the Import Command:** Once the database exists, import your data into it.
+
+    ```bash
+    docker-compose exec sqlsrv /bin/bash -c '/opt/mssql-tools18/bin/sqlcmd -S localhost -U sa -P "${SA_PASSWORD}" -d "${DB_DATABASE}" -i /var/www/backup.sql -N -C'
+    ```
+
+## Working with the Database
+
+Here are some useful commands for managing the database directly from your host machine.
+
+### Drop the Database
+
+To delete the existing database, run:
+
+```bash
+/opt/mssql-tools18/bin/sqlcmd -S localhost -U sa -P agelos@L1nux -Q "drop DATABASE ekne" -N -C
 ```
-this change (to update to the latest deb)
- seems to resolve the issue
-RUN curl -o msodbcsql17_amd64.deb https://packages.microsoft.com/debian/9/prod/pool/main/m/msodbcsql17/msodbcsql17_17.10.6.1-1_amd64.deb
-RUN ACCEPT_EULA=Y dpkg -i msodbcsql17_amd64.deb
 
+### Create the Database
 
-### Do not forget to Say "thank you" 
+To create a new, empty database, use:
 
-- ![GitHub Repo stars](https://img.shields.io/github/stars/agelospanagiotakis/Docker-Laravel-MSSQL?style=social)
+```bash
+/opt/mssql-tools18/bin/sqlcmd -S localhost -U sa -P agelos@L1nux -Q "CREATE DATABASE ekne" -N -C
+```
 
-- [donate](https://paypal.me/agelospanagiotakis?country.x=GR&locale.x=el_GR)
+### Import a SQL File
 
+To import data from a `.sql` file into the database, run:
 
+```bash
+docker-compose exec sqlsrv /bin/bash -c '/opt/mssql-tools18/bin/sqlcmd -S localhost -U sa -P "agelos@L1nux" -d "ekne" -i /var/www/backup.sql -N -C'
+```
+
+## Built With
+
+- [Laravel](https://laravel.com/) - The web framework used
+- [Vite](https://vitejs.dev/) - The frontend build tool
+- [Tailwind CSS](https://tailwindcss.com/) - The CSS framework
+- [Alpine.js](https://alpinejs.dev/) - The JavaScript framework
+- [Docker](https://www.docker.com/) - The containerization platform
+- [Pest](https://pestphp.com/) - The PHP testing framework
