@@ -6,6 +6,7 @@
 
 namespace App\Models;
 
+use App\Enums\TableNames;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 
@@ -34,7 +35,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 class TextsAdmission extends Model
 {
     use HasFactory;
-	protected $table = 'texts_admissions';
+	protected $table = TableNames::TextsAdmissions->value;
 	public $incrementing = true;
 	public $timestamps = true;
 

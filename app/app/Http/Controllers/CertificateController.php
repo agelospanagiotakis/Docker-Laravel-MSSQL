@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use App\Models\Certificate;
 use App\Models\TextsCertificate;
 use Illuminate\Support\Facades\DB;
+use App\Enums\TableNames;
 
 class CertificateController extends Controller
 {
@@ -36,14 +37,14 @@ class CertificateController extends Controller
         $certificate->IssuedDate = $validatedData['IssuedDate'];
 
         if (isset($validatedData['DoctorA'])) {
-            $doctorA = DB::table('doctor')->where(DB::raw("CONCAT(FirstName, ' ', LastName)"), $validatedData['DoctorA'])->first();
+            $doctorA = DB::table(TableNames::Doctors->value)->where(DB::raw("CONCAT(FirstName, ' ', LastName)"), $validatedData['DoctorA'])->first();
             if ($doctorA) {
                 $certificate->DoctorA = $doctorA->ID;
             }
         }
 
         if (isset($validatedData['DoctorB'])) {
-            $doctorB = DB::table('doctor')->where(DB::raw("CONCAT(FirstName, ' ', LastName)"), $validatedData['DoctorB'])->first();
+            $doctorB = DB::table(TableNames::Doctors->value)->where(DB::raw("CONCAT(FirstName, ' ', LastName)"), $validatedData['DoctorB'])->first();
             if ($doctorB) {
                 $certificate->DoctorB = $doctorB->ID;
             }

@@ -11,6 +11,7 @@ use App\Models\Certificate;
 use App\Models\Surgery;
 use App\Models\TextsAdmission;
 use Carbon\Carbon; // Make sure to import Carbon
+use App\Enums\TableNames;
 
 class AdmissionController extends Controller
 {
@@ -238,15 +239,15 @@ LastAdmissionIllness.DateInserted as LastAdmissionIllness_DateInserted,
 LastAdmissionIllness.UserUpdated as LastAdmissionIllness_UserUpdated,
 LastAdmissionIllness.DateUpdated as LastAdmissionIllness_DateUpdated,
     ROW_NUMBER() OVER (ORDER BY LastAdmission.DateUpdated DESC) AS RowNum
-    FROM Patient
-    LEFT JOIN Admission AS LastAdmission ON LastAdmission.ID = Patient.LastAdmissionID
+    FROM ' . TableNames::Patients->value . '
+    LEFT JOIN ' . TableNames::Admissions->value . ' AS LastAdmission ON LastAdmission.ID = Patient.LastAdmissionID
 LEFT JOIN Lookup AS InsuranceLookup ON InsuranceLookup.ID = Patient.InsuranceID
 LEFT JOIN Lookup AS ProfessionLookup ON ProfessionLookup.ID = Patient.ProfessionTypeID
 LEFT JOIN Lookup AS EducationLookup ON EducationLookup.ID = Patient.EducationLevelID
 LEFT JOIN Lookup AS DiagnosisLookup ON DiagnosisLookup.ID = LastAdmission.DiagnosisID
 LEFT JOIN Lookup AS IllnessLookup ON IllnessLookup.ID = LastAdmission.IllnessID
-LEFT JOIN Doctor AS DoctorA ON DoctorA.ID = LastAdmission.DoctorA
-LEFT JOIN Doctor AS DoctorB ON DoctorB.ID = LastAdmission.DoctorB
+LEFT JOIN ' . TableNames::Doctors->value . ' AS DoctorA ON DoctorA.ID = LastAdmission.DoctorA
+LEFT JOIN ' . TableNames::Doctors->value . ' AS DoctorB ON DoctorB.ID = LastAdmission.DoctorB
 LEFT JOIN Lookup AS NationalityLookup ON NationalityLookup.ID = Patient.NationalityID
 LEFT JOIN Lookup AS LastAdmission_Result ON LastAdmission_Result.ID = LastAdmission.ResultID
 LEFT JOIN Lookup AS DoctorBSpecializationLookup ON DoctorBSpecializationLookup.ID = DoctorB.SpecializationID
@@ -307,21 +308,21 @@ LEFT JOIN Lookup AS LastAdmissionIllness ON LastAdmissionIllness.ID = LastAdmiss
 
 
         $totalPages = ceil($totalItems / $perPage);
-        $illnessesType = DB::table('LookupType')->where('Code', 'illness')->first();
-        $resultsType = DB::table('LookupType')->where('Code', 'Result')->first();
+        $illnessesType = DB::table('lookuptype')->where('Code', 'illness')->first();
+        $resultsType = DB::table('lookuptype')->where('Code', 'Result')->first();
 
         $illnessesTypeId = $illnessesType ? $illnessesType->ID : null;
         $resultsTypeId = $resultsType ? $resultsType->ID : null;
 
-        $doctorsA = DB::table('Doctor')
+        $doctorsA = DB::table(TableNames::Doctors->value)
         ->select(DB::raw("ID, CASE WHEN Title IS NULL THEN Firstname + ' ' + Lastname ELSE Title + ' ' + Firstname + ' ' + Lastname END AS Name"))
         ->where('IsActive', true)
         ->orderBy('DisplayOrder')
         ->get();
 
         $doctorsB =  $doctorsA ;
-        $illnesses = DB::table('Lookup')->where('LookupTypeID', $illnessesTypeId)->get();
-        $results = DB::table('Lookup')->where('LookupTypeID', $resultsTypeId)->get();
+        $illnesses = DB::table('lookup')->where('LookupTypeID', $illnessesTypeId)->get();
+        $results = DB::table('lookup')->where('LookupTypeID', 'like', $resultsTypeId)->get();
 
         return view('admissions.index',
         [
@@ -537,60 +538,63 @@ public function show($id)
         $admission->ERight = $request->has('ERight');
 
         if (isset($validatedData['Room'])) {
-            $room = DB::table('Lookup')->where('Value', $validatedData['Room'])->first();
+            $room = DB::table('lookup')->where('Value', $validatedData['Room'])->first();
             if ($room) {
                 $admission->RoomID = $room->ID;
             }
         }
 
         if (isset($validatedData['DoctorA'])) {
-            $doctorA = DB::table('doctor')->where(DB::raw("CONCAT(FirstName, ' ', LastName)"), $validatedData['DoctorA'])->first();
+            $doctorA = DB::table(TableNames::Doctors->value)->where(DB::raw("CONCAT(FirstName, ' ', LastName)"), $validatedData['DoctorA'])->first();
             if ($doctorA) {
                 $admission->DoctorA = $doctorA->ID;
             }
         }
 
         if (isset($validatedData['DoctorB'])) {
-            $doctorB = DB::table('doctor')->where(DB::raw("CONCAT(FirstName, ' ', LastName)"), $validatedData['DoctorB'])->first();
+            $doctorB = DB::table(TableNames::Doctors->value)->where(DB::raw("CONCAT(FirstName, ' ', LastName)"), $validatedData['DoctorB'])->first();
             if ($doctorB) {
                 $admission->DoctorB = $doctorB->ID;
             }
         }
 
         if (isset($validatedData['Illness'])) {
-            $illness = DB::table('Lookup')->where('Value', $validatedData['Illness'])->first();
+            $illness = DB::table('lookup')->where('Value', $validatedData['Illness'])->first();
             if ($illness) {
                 $admission->IllnessID = $illness->ID;
             }
         }
 
         if (isset($validatedData['Diagnosis'])) {
-            $diagnosis = DB::table('Lookup')->where('Value', $validatedData['Diagnosis'])->first();
+            $diagnosis = DB::table('lookup')->where('Value', $validatedData['Diagnosis'])->first();
             if ($diagnosis) {
                 $admission->DiagnosisID = $diagnosis->ID;
             }
         }
 
         if (isset($validatedData['Localization'])) {
-            $localization = DB::table('Lookup')->where('Value', $validatedData['Localization'])->first();
+            $localization = DB::table('lookup')->where('Value', $validatedData['Localization'])->first();
             if ($localization) {
                 $admission->LocalizationID = $localization->ID;
             }
         }
 
         if (isset($validatedData['Result'])) {
-            $result = DB::table('Lookup')->where('Value', $validatedData['Result'])->first();
+            $result = DB::table('lookup')->where('Value', $validatedData['Result'])->first();
             if ($result) {
                 $admission->ResultID = $result->ID;
             }
         }
 
         if (isset($validatedData['SMark'])) {
-            $sMark = DB::table('Lookup')->where('Value', $validatedData['SMark'])->first();
+            $sMark = DB::table('lookup')->where('Value', $validatedData['SMark'])->first();
             if ($sMark) {
                 $admission->SMarkID = $sMark->ID;
             }
         }
+
+        $admission->UserUpdated = auth()->user()->name ?? auth()->user()->UserID;
+        $admission->DateUpdated = Carbon::now();
         
         $admission->save();
 

@@ -7,6 +7,7 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use App\Enums\TableNames;
 
 /**
  * Class Usersinrole
@@ -19,7 +20,7 @@ use Illuminate\Database\Eloquent\Model;
  */
 class Usersinrole extends Model
 {
-	protected $table = 'usersinrole';
+	protected $table = TableNames::UsersInRole->value;
 	public $incrementing = false;
 	public $timestamps = false;
 

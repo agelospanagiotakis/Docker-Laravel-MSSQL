@@ -6,6 +6,7 @@
 
 namespace App\Models;
 
+use App\Enums\TableNames;
 use Illuminate\Database\Eloquent\Model;
 //add use for model Operation
 use App\Models\Doctor;
@@ -44,7 +45,7 @@ use Illuminate\Database\Eloquent\Relations\HasOne;
 class Surgery extends Model
 {
     use HasFactory;
-	protected $table = 'surgeries';
+	protected $table = TableNames::Surgeries->value;
     protected $primaryKey = 'ID';
 
 	public $incrementing = true;

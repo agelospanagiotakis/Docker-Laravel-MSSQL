@@ -7,6 +7,7 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use App\Enums\TableNames;
 
 /**
  * Class Lookup
@@ -26,7 +27,7 @@ use Illuminate\Database\Eloquent\Model;
  */
 class Lookup extends Model
 {
-	protected $table = 'lookup';
+	protected $table = TableNames::Lookups->value;
 	public $incrementing = false;
 	public $timestamps = false;
 

@@ -6,6 +6,7 @@
 
 namespace App\Models;
 
+use App\Enums\TableNames;
 use Illuminate\Database\Eloquent\Model;
 use App\Models\Visit;
 use App\Models\Admission;
@@ -49,7 +50,7 @@ class Patient extends Model
 {
     use HasFactory;
       // Specify the table name if it's not the plural of the model
-    protected $table = 'patients';
+    protected $table = TableNames::Patients->value;
     // Specify the primary key if it's not 'id'
     protected $primaryKey = 'ID';
 	public $incrementing = true;

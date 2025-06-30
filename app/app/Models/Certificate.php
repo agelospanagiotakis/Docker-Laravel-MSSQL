@@ -6,6 +6,7 @@
 
 namespace App\Models;
 
+use App\Enums\TableNames;
 use Illuminate\Database\Eloquent\Model;
 use App\Models\Admission;
 use App\Models\TextsCertificate;
@@ -38,7 +39,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 class Certificate extends Model
 {
     use HasFactory;
-	protected $table = 'certificates';
+	protected $table = TableNames::Certificates->value;
 	protected $primaryKey = 'ID';
 	public $incrementing = true;
 	public $timestamps = true;

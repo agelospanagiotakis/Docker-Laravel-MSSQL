@@ -6,6 +6,7 @@
 
 namespace App\Models;
 
+use App\Enums\TableNames;
 use Illuminate\Database\Eloquent\Model;
 use App\Models\Visit;
 use App\Models\Lookup;
@@ -63,9 +64,10 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 class Admission extends Model
 {
     use HasFactory;
-	protected $table = 'admissions';
+	protected $table = TableNames::Admissions->value;
+	protected $primaryKey = 'ID';
 	public $incrementing = true;
-	public $timestamps = true;
+	public $timestamps = false;
 	protected $dates = [
         'FromDate',
         'ToDate',

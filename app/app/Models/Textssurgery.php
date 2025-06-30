@@ -6,6 +6,7 @@
 
 namespace App\Models;
 
+use App\Enums\TableNames;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -40,7 +41,7 @@ class Textssurgery extends Model
      *
      * @var string
      */
-    protected $table = 'texts_surgeries';
+    protected $table = TableNames::TextsSurgeries->value;
 
     /**
      * The primary key associated with the table.

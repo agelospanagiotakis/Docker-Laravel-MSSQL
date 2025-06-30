@@ -6,6 +6,7 @@
 
 namespace App\Models;
 
+use App\Enums\TableNames;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 
@@ -33,7 +34,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 class Doctor extends Model
 {
     use HasFactory;
-	protected $table = 'doctors';
+	protected $table = TableNames::Doctors->value;
 	public $incrementing = true;
 	public $timestamps = true;
 

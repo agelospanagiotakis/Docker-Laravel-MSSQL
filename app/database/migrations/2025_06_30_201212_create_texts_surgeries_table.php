@@ -1,5 +1,6 @@
 <?php
 
+use App\Enums\TableNames;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
@@ -11,7 +12,7 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('texts_surgeries', function (Blueprint $table) {
+        Schema::create(TableNames::TextsSurgeries->value, function (Blueprint $table) {
             $table->id('ID');
             $table->foreignId('SurgeryID')->nullable()->constrained('surgeries', 'ID');
             $table->text('SuAbout')->nullable();
@@ -36,6 +37,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('texts_surgeries');
+        Schema::dropIfExists(TableNames::TextsSurgeries->value);
     }
 };

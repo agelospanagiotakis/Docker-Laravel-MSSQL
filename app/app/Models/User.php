@@ -6,6 +6,7 @@
 
 namespace App\Models;
 
+use App\Enums\TableNames;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
@@ -26,14 +27,20 @@ class User extends Authenticatable
 {
     use HasFactory, Notifiable;
 
-	protected $table = 'users';
-    protected $primaryKey = 'id';
-    public $incrementing = true;
-	public $timestamps = true;
+	protected $table = TableNames::Users->value;
+    protected $primaryKey = 'UserID';
+    public $incrementing = false; // Set this to false if UserID is not auto-incrementing
+	public $timestamps = false;
+
+	protected $casts = [
+		'DoctorAEI' => 'int'
+	];
 
 	protected $fillable = [
-		'name',
-		'email',
-		'password',
+		'UserID',
+		'Password',
+		'FullName',
+		'Email',
+		'DoctorAEI'
 	];
 }

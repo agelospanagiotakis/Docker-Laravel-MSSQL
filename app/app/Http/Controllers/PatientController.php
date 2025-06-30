@@ -9,6 +9,7 @@ use App\Models\Certificate;
 use App\Models\TextsCertificate;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
+use App\Enums\TableNames;
 
 class PatientController extends Controller
 {
@@ -42,7 +43,7 @@ public function index(Request $request)
 
     $offset = ($page - 1) * $perPage;  // Calculate the offset
      // Count total number of patients (for pagination)
-     $total = DB::table('Patient')
+     $total = DB::table(TableNames::Patients->value)
      ->when($search, function ($query, $search) {
          return $query->where('Code', 'like', "%$search%")
                       ->orWhere('LastName', 'like', "%$search%")
@@ -53,7 +54,7 @@ public function index(Request $request)
  // Calculate total pages
     $totalPages = ceil($total / $perPage);
     // Query to paginate using ROW_NUMBER() for SQL Server 2008
-    $patients = DB::table(DB::raw("(SELECT *, ROW_NUMBER() OVER (ORDER BY Code) AS row_num FROM [Patient]) AS temp"))
+    $patients = DB::table(DB::raw("(SELECT *, ROW_NUMBER() OVER (ORDER BY Code) AS row_num FROM [" . TableNames::Patients->value . "]) AS temp"))
         ->when($search, function ($query, $search) {
             return $query->where('Code', 'like', "%$search%")
                          ->orWhere('LastName', 'like', "%$search%")
