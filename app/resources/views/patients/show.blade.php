@@ -155,14 +155,16 @@
                                 <label for="surgery-select" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Επιλέξτε επεμβαση:</label>
                                 <select id="surgery-select" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
                                     <option value="">Επιλέξτε επεμβαση</option>
-                                    @foreach ($selectedAdmission->surgeries as $surgery)
-                                        <option value="{{ $surgery->ID }}"
-                                            {{ $selectedSurgeryID == $surgery->ID ? 'selected' : '' }}>
-                                            {{ $loop->iteration }}. 
-                                            {{$surgery->ID}}  /  {{ $surgery->DatePerformed->format('Y-m-d') }} - {{ $surgery->operation->Value ?? '' }}
-                                            {{ e($surgery->ID) }}
-                                        </option>
-                                    @endforeach
+                                    @if($selectedAdmission)
+                                        @foreach ($selectedAdmission->surgeries as $surgery)
+                                            <option value="{{ $surgery->ID }}"
+                                                {{ $selectedSurgeryID == $surgery->ID ? 'selected' : '' }}>
+                                                {{ $loop->iteration }}. 
+                                                {{$surgery->ID}}  /  {{ $surgery->DatePerformed->format('Y-m-d') }} - {{ $surgery->operation->Value ?? '' }}
+                                                {{ e($surgery->ID) }}
+                                            </option>
+                                        @endforeach
+                                    @endif
                                 </select>
                             <div id="surgery-details-container" class="p-4 mt-2 bg-gray-100 rounded-lg">
                                 <div id="surgery-details-content">
@@ -182,14 +184,16 @@
                                     :</label>
                                 <select id="certificate-select" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
                                     <option value="">Select a certificate</option>
-                                    @foreach ($selectedAdmission->certificates as $cert)
-                                        <option value="{{ $cert->ID }}"
-                                            {{ $selectedCertificateID == $cert->ID ? 'selected' : '' }}>
-                                            {{ $loop->iteration }}. 
-                                            {{ $cert->ID }} -   {{ $cert->IssuedDate }} - (από {{ $cert->FromDate }} - εώς {{ $cert->ToDate }}
-                                            {{ e($cert->ID) }}
-                                        </option>
-                                    @endforeach
+                                    @if($selectedAdmission)
+                                        @foreach ($selectedAdmission->certificates as $cert)
+                                            <option value="{{ $cert->ID }}"
+                                                {{ $selectedCertificateID == $cert->ID ? 'selected' : '' }}>
+                                                {{ $loop->iteration }}. 
+                                                {{ $cert->ID }} -   {{ $cert->IssuedDate }} - (από {{ $cert->FromDate }} - εώς {{ $cert->ToDate }}
+                                                {{ e($cert->ID) }}
+                                            </option>
+                                        @endforeach
+                                    @endif
                                 </select>
 
                                 

@@ -8,6 +8,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 use App\Models\Certificate;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 /**
@@ -37,10 +38,11 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
  */
 class TextsCertificate extends Model
 {
-	protected $table = 'TextsCertificate';
+    use HasFactory;
+	protected $table = 'texts_certificates';
 	protected $primaryKey = 'ID';
-	public $incrementing = false;
-	public $timestamps = false;
+	public $incrementing = true;
+	public $timestamps = true;
 
 	protected $casts = [
 		'ID' => 'int',

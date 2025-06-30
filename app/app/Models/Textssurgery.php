@@ -40,7 +40,7 @@ class Textssurgery extends Model
      *
      * @var string
      */
-    protected $table = 'TextsSurgery';
+    protected $table = 'texts_surgeries';
 
     /**
      * The primary key associated with the table.

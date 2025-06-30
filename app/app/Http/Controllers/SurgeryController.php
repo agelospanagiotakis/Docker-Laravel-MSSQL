@@ -126,6 +126,7 @@ class SurgeryController extends Controller
         $validatedData = $request->validate([
             'DoctorOperator' => 'nullable|string',
             'DoctorAssistant' => 'nullable|string',
+            'Notes' => 'nullable|string',
             'DoctorAssistantB' => 'nullable|string',
             'DoctorAnest' => 'nullable|string',
             'DatePerformed' => 'nullable|date',
@@ -140,6 +141,7 @@ class SurgeryController extends Controller
         ]);
 
         $surgery->DatePerformed = $validatedData['DatePerformed'];
+        $surgery->Notes = $validatedData['Notes'];
 
         if (isset($validatedData['DoctorOperator'])) {
             $doctorOperator = Doctor::where(DB::raw("CONCAT(FirstName, ' ', LastName)"), $validatedData['DoctorOperator'])->first();

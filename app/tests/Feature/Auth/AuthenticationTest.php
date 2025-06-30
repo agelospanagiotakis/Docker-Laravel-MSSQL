@@ -12,7 +12,7 @@ test('users can authenticate using the login screen', function () {
     $user = User::factory()->create();
 
     $response = $this->post('/login', [
-        'userid' => $user->UserID,
+        'userid' => $user->name,
         'password' => 'password',
     ]);
 

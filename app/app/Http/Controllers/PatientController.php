@@ -71,6 +71,12 @@ public function index(Request $request)
   {
     $textsCertificates = [];
     $patient = Patient::findOrFail($id);
+    $selectedAdmissionId = $patient->LastAdmissionID ?? null;
+    $selectedAdmission = null;
+    $selectedSurgeryID = null;
+    $selectedSurgery = null;
+    $selectedCertificateID = null;
+    $selectedCertificate = null;
     if ($patient){
 
         $patient = Patient::with([
@@ -108,10 +114,6 @@ public function index(Request $request)
         ->orderBy('FromDate', 'desc')
         ->get();
 
-        // selectedAdmissionId is the most recent admission
-        // $selectedAdmissionId = $admissions->first()->ID ?? null;
-        $selectedAdmissionId = $patient->LastAdmissionID ?? null;
-        $selectedAdmission = null;
         if ($selectedAdmissionId) {
             $selectedAdmission = Admission::with([
                 'doctorA',
@@ -138,13 +140,6 @@ public function index(Request $request)
             //loop here to get the textsCertificate and add them to the new array textsCertificates
         //   dd($selectedAdmission);
 
-            $selectedSurgeryID = null;
-            $selectedSurgeryID = null;
-            $selectedSurgeryID = null;
-            $selectedSurgeryID = null;
-            $selectedSurgeryID = null;
-            $selectedSurgeryID = null;
-            $selectedSurgeryID = null;
             $selectedSurgeryID = null;
             $selectedSurgery = null;
             foreach ($selectedAdmission->surgeries as $mysurgery) {

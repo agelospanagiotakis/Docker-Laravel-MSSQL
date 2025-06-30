@@ -18,6 +18,8 @@ class CertificateController extends Controller
             'DoctorB' => 'nullable|string',
             'FromDate' => 'nullable|date',
             'ToDate' => 'nullable|date',
+            'IssuedDate' => 'nullable|date',
+            'Notes' => 'nullable|string',
             'CeParousa' => 'nullable|string',
             'CeAtomiko' => 'nullable|string',
             'CeNeuron' => 'nullable|string',
@@ -30,6 +32,8 @@ class CertificateController extends Controller
 
         $certificate->FromDate = $validatedData['FromDate'];
         $certificate->ToDate = $validatedData['ToDate'];
+        $certificate->Notes = $validatedData['Notes'];
+        $certificate->IssuedDate = $validatedData['IssuedDate'];
 
         if (isset($validatedData['DoctorA'])) {
             $doctorA = DB::table('doctor')->where(DB::raw("CONCAT(FirstName, ' ', LastName)"), $validatedData['DoctorA'])->first();

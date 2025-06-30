@@ -42,7 +42,7 @@ class AuthenticatedSessionController extends Controller
         // dd($request->input('userId'));
         // die;
         // Use custom logic for authentication
-        $user = User::where('UserID', $request->input('userid'))->first();
+        $user = User::where('name', $request->input('userid'))->first();
         // var_dump( $user);
         // die;
 

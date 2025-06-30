@@ -1,4 +1,8 @@
 ./app/node_modules
 ./app/vendor
 .env
-./app/*.sql
+*.sql
+vendor
+node_modules
+mssql
+mssql1
