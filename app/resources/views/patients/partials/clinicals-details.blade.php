@@ -1,7 +1,7 @@
 ΠΑΡΟΥΣΑ ΝΟΣΟΣ: <br />
 @if ($admission)
-    @if ($admission->textsAdmission)
-    <form action="{{ route('admissions.texts.update', $admission->textsAdmission->ID) }}" method="POST">
+    @if ($admission)
+    <form action="{{ route('admissions.texts.update', $admission->ID) }}" method="POST">
         @csrf
         @method('PATCH')
         <div class="grid grid-cols-2">
@@ -10,33 +10,33 @@
                         <textarea name="AdParousa" rows="4"
                             class="block p-2.5 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
                        rows="15"
-                            >{{ e($admission->textsAdmission->AdParousa) }}</textarea>
+                            >{{ e($admission->textsAdmission->AdParousa ?? '') }}</textarea>
                         <BR />
                         ΑΤΟΜΙΚΟ ΑΝΑΜΝΗΣΤΙΚΟ: <BR />
                         <textarea name="AdAtomiko" rows="4"
                             class="block p-2.5 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
                        rows="15"
-                       >{{ e($admission->textsAdmission->AdAtomiko) }}</textarea>
+                       >{{ e($admission->textsAdmission->AdAtomiko ?? '') }}</textarea>
 
                         ΝΕΥΡΟΛΟΓΙΚΉ ΕΞΕΤΑΣΗ <BR />
                         <textarea name="AdNeuron" rows="4"
                             class="block p-2.5 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
                        rows="15"
-                       >{{ e($admission->textsAdmission->AdNeuron) }}</textarea>
+                       >{{ e($admission->textsAdmission->AdNeuron ?? '') }}</textarea>
                         <BR />
 
                         ΑΠΕΙΚΟΝΙΣΤΙΚΆ <span class="text-orange">
                             <textarea name="AdProjections" rows="4"
                                 class="block p-2.5 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
                        rows="15"
-                                >{{ e($admission->textsAdmission->AdProjections) }}</textarea>
+                                >{{ e($admission->textsAdmission->AdProjections ?? '') }}</textarea>
                         </span><BR />
     </div>
     <div class="">
         ΠΟΡΕΊΑ <span class="text-orange">
             <textarea name="AdPoreia" rows="40"
                 class="block p-2.5 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                >{{ e($admission->textsAdmission->AdPoreia) }}</textarea>
+                >{{ e($admission->textsAdmission->AdPoreia ?? '') }}</textarea>
         </span><BR />
     </div>
 </div>

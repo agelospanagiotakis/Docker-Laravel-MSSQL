@@ -37,7 +37,7 @@ class TextsAdmission extends Model
     use HasFactory;
 	protected $table = TableNames::TextsAdmissions->value;
 	public $incrementing = true;
-	public $timestamps = true;
+	public $timestamps = false;
 
 	protected $casts = [
 		'ID' => 'int',

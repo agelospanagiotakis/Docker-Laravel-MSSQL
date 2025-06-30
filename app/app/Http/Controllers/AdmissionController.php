@@ -603,8 +603,6 @@ public function show($id)
 
     public function updateTexts(Request $request, $id)
     {
-        $textsAdmission = TextsAdmission::findOrFail($id);
-
         $validatedData = $request->validate([
             'AdParousa' => 'nullable|string',
             'AdAtomiko' => 'nullable|string',
@@ -612,15 +610,20 @@ public function show($id)
             'AdProjections' => 'nullable|string',
             'AdPoreia' => 'nullable|string',
         ]);
-
-        $textsAdmission->AdParousa = $validatedData['AdParousa'];
-        $textsAdmission->AdAtomiko = $validatedData['AdAtomiko'];
-        $textsAdmission->AdNeuron = $validatedData['AdNeuron'];
-        $textsAdmission->AdProjections = $validatedData['AdProjections'];
-        $textsAdmission->AdPoreia = $validatedData['AdPoreia'];
-
-        $textsAdmission->save();
-
+    
+        $textsAdmission = TextsAdmission::updateOrCreate(
+            ['AdmissionID' => $id],
+            [
+                'AdParousa' => $validatedData['AdParousa'],
+                'AdAtomiko' => $validatedData['AdAtomiko'],
+                'AdNeuron' => $validatedData['AdNeuron'],
+                'AdProjections' => $validatedData['AdProjections'],
+                'AdPoreia' => $validatedData['AdPoreia'],
+                'UserUpdated' => auth()->user()->name ?? auth()->user()->UserID,
+                'DateUpdated' => Carbon::now(),
+            ]
+        );
+    
         return redirect()->back()->with('success', 'Clinical details updated successfully.');
     }
 }
