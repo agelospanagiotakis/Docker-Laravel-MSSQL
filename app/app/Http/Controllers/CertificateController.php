@@ -24,9 +24,9 @@ class CertificateController extends Controller
             'CeParousa' => 'nullable|string',
             'CeAtomiko' => 'nullable|string',
             'CeNeuron' => 'nullable|string',
-            'ceProjections' => 'nullable|string',
-            'cePoreia' => 'nullable|string',
-            'ceDrugs' => 'nullable|string',
+            'CeProjections' => 'nullable|string',
+            'CePoreia' => 'nullable|string',
+            'CeDrugs' => 'nullable|string',
             'CeDirections' => 'nullable|string',
             'CeSickLeave' => 'nullable|string',
         ]);
@@ -57,9 +57,18 @@ class CertificateController extends Controller
         if ($certificate->textsCertificate) {
             $textsCertificate = $certificate->textsCertificate;
             $textFields = [
-                'CeParousa', 'CeAtomiko', 'CeNeuron', 'ceProjections', 'cePoreia',
-                'ceDrugs', 'CeDirections', 'CeSickLeave'
+                'CeParousa', 'CeAtomiko', 'CeNeuron', 'CeProjections', 'CePoreia',
+                'CeDrugs', 'CeDirections', 'CeSickLeave'
             ];
+            foreach ($textFields as $field) {
+                if (array_key_exists($field, $validatedData)) {
+                    $textsCertificate->$field = $validatedData[$field];
+                }
+            }
+            $textsCertificate->save();
+        } else {
+            $textsCertificate = new TextsCertificate();
+            $textsCertificate->CertificateID = $certificate->ID;
             foreach ($textFields as $field) {
                 if (array_key_exists($field, $validatedData)) {
                     $textsCertificate->$field = $validatedData[$field];

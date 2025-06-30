@@ -73,74 +73,39 @@ certificate start
                 ΠΑΡΟΥΣΑ ΝΟΣΟΣ: <br />
                 <textarea name="CeParousa" rows="4"
                     class="block p-2.5 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                    >
-                    @if ($certificate->textsCertificate)
-                    {{ e($certificate->textsCertificate->CeParousa) }}
-                    @endif 
-                </textarea>
+                    >@if ($certificate->textsCertificate){{ e($certificate->textsCertificate->CeParousa) }}@endif</textarea>
                 ΑΤΟΜΙΚΟ: <br />
                 <textarea name="CeAtomiko" rows="4"
                     class="block p-2.5 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                    >
-                    @if ($certificate->textsCertificate)
-                    {{ e($certificate->textsCertificate->CeAtomiko ?? '') }}
-                    @endif 
-                    </textarea>
+                    >@if ($certificate->textsCertificate){{ e($certificate->textsCertificate->CeAtomiko ?? '') }}@endif</textarea>
                 ΝΕΥΡΟΛΟΓΙΚΗ ΕΞΕΤΑΣΗ: <br />
                 <textarea name="CeNeuron" rows="4"
                     class="block p-2.5 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                    >
-                    @if ($certificate->textsCertificate)
-                    {{ e($certificate->textsCertificate->CeNeuron ?? '') }}
-                    @endif 
-                </textarea>
+                    >@if ($certificate->textsCertificate){{ e($certificate->textsCertificate->CeNeuron ?? '') }}@endif</textarea>
                 ΑΠΕΙΚΟΝΙΣΤΙΚΆ: <br />
-                <textarea name="ceProjections" rows="4"
+                <textarea name="CeProjections" rows="4"
                     class="block p-2.5 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                   >
-                   @if ($certificate->textsCertificate)
-                   {{ e($certificate->textsCertificate->ceProjections ?? '') }}
-                   @endif 
-                   </textarea>
+                   >@if ($certificate->textsCertificate){{ e($certificate->textsCertificate->CeProjections ?? '') }}@endif</textarea>
 
                 ΠΟΡΕΙΑ-ΕΠΕΜΒΑΣΕΙΣ: <br />
-                <textarea name="cePoreia" rows="4"
+                <textarea name="CePoreia" rows="4"
                     class="block p-2.5 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-
-                >
-                @if ($certificate->textsCertificate)
-                {{ e($certificate->textsCertificate->cePoreia ?? '') }}
-                @endif         
-            </textarea>
+                >@if ($certificate->textsCertificate){{ e($certificate->textsCertificate->CePoreia ?? '') }}@endif</textarea>
 
                 ΦΑΡΜΑΚΕΥΤΙΚΗ ΑΓΩΓΗ: <br />
-                <textarea name="ceDrugs" rows="4"
+                <textarea name="CeDrugs" rows="4"
                     class="block p-2.5 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                    >
-                    @if ($certificate->textsCertificate)
-                    {{ e($certificate->textsCertificate->ceDrugs ?? '') }}
-                    @endif         
-                </textarea>
+                    >@if ($certificate->textsCertificate){{ e($certificate->textsCertificate->CeDrugs ?? '') }}@endif</textarea>
 
                 ΟΔΗΓΙΕΣ: <br />
                 <textarea name="CeDirections" rows="4"
                     class="block p-2.5 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                    
-                    >
-                    @if ($certificate->textsCertificate)
-                    {{ e($certificate->textsCertificate->CeDirections ?? '') }}
-                    @endif         
-                </textarea>
+                    >@if ($certificate->textsCertificate){{ e($certificate->textsCertificate->CeDirections ?? '') }}@endif</textarea>
 
                 ΑΝΑΡΩΤΙΚΗ ΑΔΕΙΑ: <br />
                 <textarea name="CeSickLeave" rows="4"
                     class="block p-2.5 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                    
-                    >
-                    @if ($certificate->textsCertificate)
-                    {{ e($certificate->textsCertificate->CeSickLeave ?? '') }}
-                    @endif         
-                </textarea>
+                    >@if ($certificate->textsCertificate){{ e($certificate->textsCertificate->CeSickLeave ?? '') }}@endif</textarea>
 
 
        

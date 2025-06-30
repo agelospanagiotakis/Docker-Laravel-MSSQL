@@ -43,7 +43,7 @@ class TextsCertificate extends Model
 	protected $table = TableNames::TextsCertificates->value;
 	protected $primaryKey = 'ID';
 	public $incrementing = true;
-	public $timestamps = true;
+	public $timestamps = false;
 
 	protected $casts = [
 		'ID' => 'int',
